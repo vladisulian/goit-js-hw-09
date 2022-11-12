@@ -7,10 +7,10 @@ function switchColor() {
     .toString(16)
     .padStart(6, 0)}`;
 }
+
 buttons.endbutton.disabled = true;
 
 let intervalId;
-document.body.style.disabled = true;
 
 buttons.startButton.addEventListener('click', () => {
   intervalId = setInterval(switchColor, 1000, 1000);
@@ -18,6 +18,7 @@ buttons.startButton.addEventListener('click', () => {
   buttons.startButton.disabled = true;
   buttons.endbutton.disabled = false;
 });
+
 buttons.endbutton.addEventListener('click', () => {
   clearInterval(intervalId);
 
