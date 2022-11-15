@@ -13,6 +13,7 @@ buttons.endbutton.disabled = true;
 let intervalId;
 
 buttons.startButton.addEventListener('click', () => {
+  switchColor();
   intervalId = setInterval(switchColor, 1000, 1000);
 
   buttons.startButton.disabled = true;
