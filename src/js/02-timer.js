@@ -14,7 +14,7 @@ const options = {
     const choosenDate = selectedDates[0];
     console.log(choosenDate);
     if (choosenDate < new Date()) {
-      alert('Choose correct date, please');
+      alert('Please, choose correct date.');
       const input = document.querySelector('#datetime-picker');
       console.log(input.value);
       return;
