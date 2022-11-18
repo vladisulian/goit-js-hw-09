@@ -34,9 +34,19 @@ const timer = {
     setInterval(() => {
       const currentTime = Date.now();
       const deltaTime = currentTime - startTime;
-      const timeComponents = convertMs(deltaTime);
-      deltaTime;
-      console.log(timeComponents);
+      const { hours, mins, secs } = convertMs(deltaTime);
+
+      // console.log(
+      //   `${pad(new Date(deltaTime).getUTCHours())}:${pad(
+      //     new Date(deltaTime).getMinutes()
+      //   )}:${pad(new Date(deltaTime).getSeconds())}`
+      // );
+
+      console.log(
+        `${new Date(deltaTime).getUTCHours()}:${new Date(
+          deltaTime
+        ).getMinutes()}:${new Date(deltaTime).getSeconds()}`
+      );
     }, 1000);
   },
 };
