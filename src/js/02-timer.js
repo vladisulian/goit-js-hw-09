@@ -35,19 +35,25 @@ startButton.addEventListener('click', () => {
   timer.start();
 });
 
+// ! Date.parse(choosenDate)
+
 const timer = {
   start() {
-    const startTime = Date.now();
-
     setInterval(() => {
-      const currentTime = Date.now();
-      const deltaTime = currentTime - startTime;
+      const userDate = document.querySelector('#datetime-picker');
+      const currentTime = Date.parse(userDate.value);
+
+      // console.log('Выбранная дата', currentTime);
+      // console.log('Стартовая дата', startTime);
+
+      const deltaTime = currentTime - Date.now();
       const { days, hours, minutes, seconds } = convertMs(deltaTime);
-      console.log(
-        `${new Date(deltaTime).getUTCHours()}:${new Date(
-          deltaTime
-        ).getMinutes()}:${new Date(deltaTime).getSeconds()}`
-      );
+
+      // * console.log(
+      //   `${new Date(deltaTime).getUTCHours()}:${new Date(
+      //     deltaTime
+      //   ).getMinutes()}:${new Date(deltaTime).getSeconds()}`
+      // );
 
       updateClockface({ days, hours, minutes, seconds });
     }, 1000);
