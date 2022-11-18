@@ -1,18 +1,24 @@
-// Описан в документации
 import flatpickr from 'flatpickr';
-// Дополнительный импорт стилей
 import 'flatpickr/dist/flatpickr.min.css';
-
 const flatpickr = require('flatpickr');
 
 const startButton = document.querySelector('[data-start]');
+
 startButton.disabled = true;
+
+const clockface = {
+  days: document.querySelector('[data-days]'),
+  hours: document.querySelector('[data-hours]'),
+  minutes: document.querySelector('[data-minutes]'),
+  seconds: document.querySelector('[data-seconds]'),
+};
 
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
+
   onClose(selectedDates) {
     const choosenDate = selectedDates[0];
     console.log(choosenDate);
@@ -24,8 +30,10 @@ const options = {
     startButton.disabled = false;
   },
 };
-
-startButton.addEventListener('click', convertMs);
+console.log(Date.now());
+startButton.addEventListener('click', () => {
+  timer.start();
+});
 
 const timer = {
   start() {
@@ -34,23 +42,17 @@ const timer = {
     setInterval(() => {
       const currentTime = Date.now();
       const deltaTime = currentTime - startTime;
-      const { hours, mins, secs } = convertMs(deltaTime);
-
-      // console.log(
-      //   `${pad(new Date(deltaTime).getUTCHours())}:${pad(
-      //     new Date(deltaTime).getMinutes()
-      //   )}:${pad(new Date(deltaTime).getSeconds())}`
-      // );
-
+      const { days, hours, minutes, seconds } = convertMs(deltaTime);
       console.log(
         `${new Date(deltaTime).getUTCHours()}:${new Date(
           deltaTime
         ).getMinutes()}:${new Date(deltaTime).getSeconds()}`
       );
+
+      updateClockface({ days, hours, minutes, seconds });
     }, 1000);
   },
 };
-timer.start();
 
 function convertMs(ms) {
   const second = 1000;
@@ -65,8 +67,10 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-
-console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
+function updateClockface({ days, hours, minutes, seconds }) {
+  clockface.days.textContent = `${days}`;
+  clockface.hours.textContent = `${hours}`;
+  clockface.minutes.textContent = `${minutes}`;
+  clockface.seconds.textContent = `${seconds}`;
+}
 flatpickr('#datetime-picker', options);
-
-console.log(new Date());
