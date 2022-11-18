@@ -56,6 +56,8 @@ const timer = {
       // );
 
       updateClockface({ days, hours, minutes, seconds });
+      addLeadingZero();
+      console.log(clockface.days.textContent.length < 2);
     }, 1000);
   },
 };
@@ -78,5 +80,11 @@ function updateClockface({ days, hours, minutes, seconds }) {
   clockface.hours.textContent = `${hours}`;
   clockface.minutes.textContent = `${minutes}`;
   clockface.seconds.textContent = `${seconds}`;
+}
+function addLeadingZero() {
+  clockface.days.textContent = clockface.days.textContent.padStart(2, '0');
+  clockface.hours.textContent = clockface.hours.textContent.padStart(2, '0');
+  clockface.minutes.textContent = clockface.minutes.textContent.padStart(2, '0');
+  clockface.seconds.textContent = clockface.seconds.textContent.padStart(2, '0');
 }
 flatpickr('#datetime-picker', options);
