@@ -74,7 +74,7 @@ const timer = {
 
       updateClockface({ days, hours, minutes, seconds });
       addLeadingZero();
-      console.log(clockface.days.textContent.length < 2);
+      // console.log(clockface.days.textContent.length < 2);
     }, 1000);
   },
 };
