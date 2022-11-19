@@ -110,4 +110,5 @@ function addLeadingZero() {
     '0'
   );
 }
-flatpickr('#datetime-picker', options);
+flatpickr('#datetime-picker', options); 
+ 
