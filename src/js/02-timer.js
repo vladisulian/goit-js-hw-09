@@ -2,6 +2,16 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 const flatpickr = require('flatpickr');
 
+// all modules
+import Notiflix from 'notiflix';
+
+// one by one
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { Report } from 'notiflix/build/notiflix-report-aio';
+import { Confirm } from 'notiflix/build/notiflix-confirm-aio';
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
+import { Block } from 'notiflix/build/notiflix-block-aio';
+
 const startButton = document.querySelector('[data-start]');
 
 startButton.disabled = true;
@@ -23,10 +33,14 @@ const options = {
     const choosenDate = selectedDates[0];
     console.log(choosenDate);
     if (choosenDate < new Date()) {
-      alert('Please, choose correct date.');
-      location.reload();
+      Notiflix.Notify.failure('Please, choose correct date.', {
+        clickToClose: true,
+      });
+      // alert('Please, choose correct date.');
+      // location.reload();
       return;
     }
+    Notiflix.Notify.success('You can start to count');
     startButton.disabled = false;
   },
 };
@@ -84,7 +98,13 @@ function updateClockface({ days, hours, minutes, seconds }) {
 function addLeadingZero() {
   clockface.days.textContent = clockface.days.textContent.padStart(2, '0');
   clockface.hours.textContent = clockface.hours.textContent.padStart(2, '0');
-  clockface.minutes.textContent = clockface.minutes.textContent.padStart(2, '0');
-  clockface.seconds.textContent = clockface.seconds.textContent.padStart(2, '0');
+  clockface.minutes.textContent = clockface.minutes.textContent.padStart(
+    2,
+    '0'
+  );
+  clockface.seconds.textContent = clockface.seconds.textContent.padStart(
+    2,
+    '0'
+  );
 }
 flatpickr('#datetime-picker', options);
