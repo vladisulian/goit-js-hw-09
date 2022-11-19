@@ -31,20 +31,23 @@ const options = {
 
   onClose(selectedDates) {
     const choosenDate = selectedDates[0];
-    console.log(choosenDate);
+
     if (choosenDate < new Date()) {
-      Notiflix.Notify.failure('Please, choose correct date.', {
+      Notiflix.Notify.warning('Please, choose correct date.', {
         clickToClose: true,
       });
+      // console.log(choosenDate);
       // alert('Please, choose correct date.');
       // location.reload();
       return;
     }
-    Notiflix.Notify.success('You can start to count');
+    Notiflix.Notify.success('You can start to count', {
+      clickToClose: true,
+    });
     startButton.disabled = false;
   },
 };
-console.log(Date.now());
+// console.log(Date.now());
 startButton.addEventListener('click', () => {
   timer.start();
 });
