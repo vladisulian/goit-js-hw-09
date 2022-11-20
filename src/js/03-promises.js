@@ -6,3 +6,6 @@ function createPromise(position, delay) {
     // Reject
   }
 }
+
+const form = document.querySelector('form');
+form.addEventListener('submit', createPromise(position, delay));
