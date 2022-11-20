@@ -36,6 +36,8 @@ const options = {
       Notiflix.Notify.warning('Please, choose correct date.', {
         clickToClose: true,
       });
+    startButton.disabled = true;
+
       // console.log(choosenDate);
       // alert('Please, choose correct date.');
       // location.reload();
@@ -51,8 +53,6 @@ const options = {
 startButton.addEventListener('click', () => {
   timer.start();
 });
-
-// ! Date.parse(choosenDate)
 
 const timer = {
   start() {
@@ -74,7 +74,6 @@ const timer = {
 
       updateClockface({ days, hours, minutes, seconds });
       addLeadingZero();
-      // console.log(clockface.days.textContent.length < 2);
     }, 1000);
   },
 };
@@ -110,5 +109,4 @@ function addLeadingZero() {
     '0'
   );
 }
-flatpickr('#datetime-picker', options); 
- 
+flatpickr('#datetime-picker', options);
