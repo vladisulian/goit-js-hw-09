@@ -36,7 +36,7 @@ const options = {
       Notiflix.Notify.warning('Please, choose correct date.', {
         clickToClose: true,
       });
-    startButton.disabled = true;
+      startButton.disabled = true;
 
       // console.log(choosenDate);
       // alert('Please, choose correct date.');
@@ -56,25 +56,22 @@ startButton.addEventListener('click', () => {
 
 const timer = {
   start() {
-    setInterval(() => {
+    const timerInterval = setInterval(interval, 1000);
+
+    function interval() {
       const userDate = document.querySelector('#datetime-picker');
       const currentTime = Date.parse(userDate.value);
-
-      // console.log('Выбранная дата', currentTime);
-      // console.log('Стартовая дата', startTime);
 
       const deltaTime = currentTime - Date.now();
       const { days, hours, minutes, seconds } = convertMs(deltaTime);
 
-      // * console.log(
-      //   `${new Date(deltaTime).getUTCHours()}:${new Date(
-      //     deltaTime
-      //   ).getMinutes()}:${new Date(deltaTime).getSeconds()}`
-      // );
-
       updateClockface({ days, hours, minutes, seconds });
       addLeadingZero();
-    }, 1000);
+
+      if (clockface.minutes.textContent === 0 && clockface.seconds.textContent === 0) {
+          clearInterval(timerInterval);
+      }
+    }
   },
 };
 
@@ -96,7 +93,13 @@ function updateClockface({ days, hours, minutes, seconds }) {
   clockface.hours.textContent = `${hours}`;
   clockface.minutes.textContent = `${minutes}`;
   clockface.seconds.textContent = `${seconds}`;
+
+  const clockfaceDays = clockface.days.textContent;
+  const clockfaceHours = clockface.hours.textContent;
+  const clockfaceMinutes = clockface.minutes.textContent;
+  const clockfaceSeconds = clockface.seconds.textContent;
 }
+
 function addLeadingZero() {
   clockface.days.textContent = clockface.days.textContent.padStart(2, '0');
   clockface.hours.textContent = clockface.hours.textContent.padStart(2, '0');
