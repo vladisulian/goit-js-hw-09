@@ -1,115 +1,91 @@
+// Описаний в документації
 import flatpickr from 'flatpickr';
+// Додатковий імпорт стилів
 import 'flatpickr/dist/flatpickr.min.css';
-// const flatpickr = require('flatpickr');
-
 // all modules
 import Notiflix from 'notiflix';
 
-// one by one
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { Report } from 'notiflix/build/notiflix-report-aio';
-import { Confirm } from 'notiflix/build/notiflix-confirm-aio';
-import { Loading } from 'notiflix/build/notiflix-loading-aio';
-import { Block } from 'notiflix/build/notiflix-block-aio';
+const text = document.querySelector('#datetime-picker');
+const timerHtml = document.querySelector('.timer');
+const btnStart = document.querySelector('button[data-start]');
+const seconds = document.querySelector('span[data-seconds]');
+const minutes = document.querySelector('span[data-minutes]');
+const hours = document.querySelector('span[data-hours]');
+const days = document.querySelector('span[data-days]');
 
-const startButton = document.querySelector('[data-start]');
-
-startButton.disabled = true;
-
-const clockface = {
-  days: document.querySelector('[data-days]'),
-  hours: document.querySelector('[data-hours]'),
-  minutes: document.querySelector('[data-minutes]'),
-  seconds: document.querySelector('[data-seconds]'),
-};
+btnStart.disabled = true;
 
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-
   onClose(selectedDates) {
-    const choosenDate = selectedDates[0];
-
-    if (choosenDate < new Date()) {
-      Notiflix.Notify.warning('Please, choose correct date.', {
-        clickToClose: true,
-      });
-      startButton.disabled = true;
-
-      // console.log(choosenDate);
-      // alert('Please, choose correct date.');
-      // location.reload();
-      return;
-    }
-    Notiflix.Notify.success('You can start to count', {
-      clickToClose: true,
-    });
-    startButton.disabled = false;
-  },
-};
-// console.log(Date.now());
-startButton.addEventListener('click', () => {
-  timer.start();
-});
-
-const timer = {
-  start() {
-    const timerInterval = setInterval(interval, 1000);
-
-    function interval() {
-      const userDate = document.querySelector('#datetime-picker');
-      const currentTime = Date.parse(userDate.value);
-
-      const deltaTime = currentTime - Date.now();
-      const { days, hours, minutes, seconds } = convertMs(deltaTime);
-
-      updateClockface({ days, hours, minutes, seconds });
-      addLeadingZero();
-
-      if (clockface.minutes.textContent === 0 && clockface.seconds.textContent === 0) {
-          clearInterval(timerInterval);
-      }
+    if (selectedDates[0] < new Date()) {
+      Notiflix.Notify.failure('Please choose a date in the future');
+      btnStart.disabled = true;
+    } else {
+      btnStart.disabled = false;
     }
   },
 };
+
+// const options = {
+//   enableTime: true,
+//   time_24hr: true,
+//   defaultDate: new Date(),
+//   minuteIncrement: 1,
+//   onClose(selectedDates) {
+//     console.log(selectedDates[0]);
+//   },
+// };
+
+flatpickr(text, options);
 
 function convertMs(ms) {
+  // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
   const day = hour * 24;
 
+  // Remaining days
   const days = Math.floor(ms / day);
+  // Remaining hours
   const hours = Math.floor((ms % day) / hour);
+  // Remaining minutes
   const minutes = Math.floor(((ms % day) % hour) / minute);
+  // Remaining seconds
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
 }
-function updateClockface({ days, hours, minutes, seconds }) {
-  clockface.days.textContent = `${days}`;
-  clockface.hours.textContent = `${hours}`;
-  clockface.minutes.textContent = `${minutes}`;
-  clockface.seconds.textContent = `${seconds}`;
 
-  const clockfaceDays = clockface.days.textContent;
-  const clockfaceHours = clockface.hours.textContent;
-  const clockfaceMinutes = clockface.minutes.textContent;
-  const clockfaceSeconds = clockface.seconds.textContent;
+// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
+// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
+// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+
+function addLeadingZero(value) {
+  return value.toString().padStart(2, '0');
 }
 
-function addLeadingZero() {
-  clockface.days.textContent = clockface.days.textContent.padStart(2, '0');
-  clockface.hours.textContent = clockface.hours.textContent.padStart(2, '0');
-  clockface.minutes.textContent = clockface.minutes.textContent.padStart(
-    2,
-    '0'
-  );
-  clockface.seconds.textContent = clockface.seconds.textContent.padStart(
-    2,
-    '0'
-  );
-}
-flatpickr('#datetime-picker', options);
+btnStart.addEventListener('click', () => {
+  let timer = setInterval(() => {
+    let countdown = new Date(text.value) - new Date();
+    btnStart.disabled = true;
+    if (countdown >= 0) {
+      let timeObject = convertMs(countdown);
+      days.textContent = addLeadingZero(timeObject.days);
+      hours.textContent = addLeadingZero(timeObject.hours);
+      minutes.textContent = addLeadingZero(timeObject.minutes);
+      seconds.textContent = addLeadingZero(timeObject.seconds);
+      if (countdown <= 10000) {
+        timerHtml.style.color = 'tomato';
+      }
+    } else {
+      Notiflix.Notify.success('Countdown finished');
+      timerHtml.style.color = 'black';
+      clearInterval(timer);
+    }
+  }, 1000);
+});
